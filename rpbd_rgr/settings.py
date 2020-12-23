@@ -56,7 +56,7 @@ ROOT_URLCONF = 'rpbd_rgr.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'dist']
+        'DIRS': [BASE_DIR / 'static']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'dist')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_FILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ADMINS = [
