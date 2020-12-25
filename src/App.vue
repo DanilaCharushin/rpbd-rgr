@@ -108,6 +108,7 @@ export default {
   async created() {
     this.$store.state.loading = true;
     await this.fetchAll();
+    await this.fetchTypes();
     this.$store.state.loading = false;
     this.allUsers = this.$store.state.users;
     this.currentUsers = Array.from(this.allUsers);
@@ -116,7 +117,7 @@ export default {
     ...mapGetters["getUsers"],
   },
   methods: {
-    ...mapActions(["fetchAll", "insertUser"]),
+    ...mapActions(["fetchAll", "fetchTypes", "insertUser"]),
     removeUserById(id) {
       this.allUsers = this.allUsers.filter(u => u.id !== id);
       this.currentUsers = Array.from(this.allUsers);
