@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
-    types: []
+    types: [],
+    loading: false
   },
   mutations: {
     commitUsers(state, users) {
@@ -18,21 +19,22 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async fetchAll({commit}) {
-      let url = `${config.host}/all`;
-      console.log("fetching GET for url " + url);
-      const users = await (await fetch(url)).json();
-      console.log("users response:");
-      console.log(users);
-      commit("commitUsers", users);
-
-      url = `${config.host}/types`;
+    async fetchTypes({commit}) {
+      const url = `${config.host}/types`;
       console.log("fetching GET for url " + url);
       const types = await (await fetch(url)).json();
       console.log("types response:");
       console.log(types);
       commit("commitTypes", types);
+    },
 
+    async fetchAll({commit}) {
+      const url = `${config.host}/all`;
+      console.log("fetching GET for url " + url);
+      const users = await (await fetch(url)).json();
+      console.log("users response:");
+      console.log(users);
+      commit("commitUsers", users);
       return this;
     },
 

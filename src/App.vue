@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <header class="header">
-      <h1>
+      <h1 v-if="!$store.state.loading">
         {{ currentUsers.length === 0 ? "Phonebook is empty" : "Phonebook users count: " + currentUsers.length }}
       </h1>
+      <div v-else class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
       <button class="btn btn-success" data-target="#add-new-user-modal" data-toggle="modal">Add new user</button>
     </header>
     <div class="search">
@@ -75,8 +78,7 @@
         v-for="user in currentUsers"
         :key="user.id"
       >
-        {{ user.id }}
-        <User :user="user"/>
+        <User :user="user" @reloadUsers="reloadUsers" @removeUserById="removeUserById"/>
       </li>
     </ul>
   </div>
@@ -104,7 +106,9 @@ export default {
     };
   },
   async created() {
+    this.$store.state.loading = true;
     await this.fetchAll();
+    this.$store.state.loading = false;
     this.allUsers = this.$store.state.users;
     this.currentUsers = Array.from(this.allUsers);
   },
@@ -113,6 +117,14 @@ export default {
   },
   methods: {
     ...mapActions(["fetchAll", "insertUser"]),
+    removeUserById(id) {
+      this.allUsers = this.allUsers.filter(u => u.id !== id);
+      this.currentUsers = Array.from(this.allUsers);
+    },
+    reloadUsers() {
+      this.allUsers = this.$store.state.users;
+      this.currentUsers = Array.from(this.allUsers);
+    },
     async addNewUser() {
       if (!this.newAddress && !this.newName) {
         return;
@@ -136,13 +148,23 @@ export default {
           type: "home"
         });
       }
-      await this.insertUser({
+
+      const newUser = {
         name: this.newName,
         address: this.newAddress,
         phones: phones,
-      });
+      }
 
-      this.currentUsers = this.allUsers = this.getUsers;
+      this.allUsers.push(newUser);
+      this.allUsers.sort((a,b) => (a.name > b.name) ? -1 : 1);
+      this.currentUsers = Array.from(this.allUsers);
+
+      this.$store.state.loading = true;
+      await this.insertUser(newUser);
+      await this.fetchAll();
+      this.$store.state.loading = false;
+      this.reloadUsers();
+
       this.newAddress = "";
       this.newName = "";
       this.newMobileNumber = "";

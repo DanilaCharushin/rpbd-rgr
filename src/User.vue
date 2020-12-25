@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["updateUser", "removeUser"]),
+    ...mapActions(["fetchAll", "updateUser", "removeUser"]),
     rollback() {
       this.newName = this.user.name;
       this.newAddress = this.user.address;
@@ -120,8 +120,15 @@ export default {
       this.newPhoneNumber = "";
       this.newPhoneType = "mobile";
     },
-    remove() {
+    async remove() {
+      this.$store.state.loading = true;
       this.removeUser(this.user);
+      this.$store.state.loading = false;
+      this.$emit("removeUserById", this.user.id);
+      this.$store.state.loading = true;
+      await this.fetchAll();
+      this.$store.state.loading = false;
+      this.$emit("reloadUsers");
     },
     getPhoneTypeIcon(phone) {
       return phone.type === "mobile" ? "phone_iphone" : phone.type;
@@ -130,8 +137,6 @@ export default {
       if (!this.newName && !this.newAddress) {
         return;
       }
-      console.log(this.user.phones);
-      console.log(this.newPhones);
 
       if (this.newPhoneNumber) {
         this.newPhones.push({
@@ -141,12 +146,17 @@ export default {
         this.newPhoneNumber = "";
         this.newPhoneType = "mobile";
       }
+
+      this.$store.state.loading = true;
       await this.updateUser({
         id: this.user.id,
         name: this.newName,
         address: this.newAddress,
         phones: this.newPhones
       });
+      await this.fetchAll();
+      this.$store.state.loading = false;
+      this.$emit("reloadUsers");
     },
     removePhone(phone) {
       this.newPhones = this.newPhones.filter(p => p.id !== phone.id);

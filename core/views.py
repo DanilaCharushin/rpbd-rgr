@@ -322,7 +322,7 @@ class OneAPIView(APIView):
             else:
                 Phone(**phone_data).save()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(id, status=status.HTTP_200_OK)
 
     def delete(self, request, id):
         user = User.objects.get(id=id)
@@ -336,5 +336,5 @@ class OneAPIView(APIView):
             Phone.objects.get(id=phone_id).delete()
 
         user.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response(id, status=status.HTTP_200_OK)
 
