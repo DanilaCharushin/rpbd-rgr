@@ -305,6 +305,10 @@ class OneAPIView(APIView):
         address.name = data["address"]
         address.save()
 
+        old_phones = Phone.objects.filter(user=user)
+        new_phones = []
+        phone_ids_to_delete = []
+
         for phone_ in data["phones"]:
             phone_data = {
                 "number": phone_["number"],
@@ -319,8 +323,19 @@ class OneAPIView(APIView):
                     setattr(phone, k, v)
                 phone.save()
                 logger.debug(phone.to_json())
+                new_phones.append(phone)
             else:
-                Phone(**phone_data).save()
+                phone = Phone(**phone_data)
+                phone.save()
+                new_phones.append(phone)
+
+        for phone in old_phones:
+            if not phone in new_phones:
+                phone_ids_to_delete.append(phone.id)
+
+        for phone_id in phone_ids_to_delete:
+            phone = Phone.objects.get(id=phone_id)
+            phone.delete()
 
         return Response(id, status=status.HTTP_200_OK)
 

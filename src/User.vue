@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="user-actions">
-      <span :data-target="'#edit-modal' + user.id" class="btn btn-outline-primary" data-toggle="modal">Edit</span>
+      <span :data-target="'#edit-modal' + user.id" class="btn btn-outline-primary action-button" data-toggle="modal">Edit</span>
       <span class="btn btn-outline-danger" @click="remove()">Remove</span>
     </div>
     <div :id="'edit-modal' + user.id" aria-hidden="true" class="modal fade" role="dialog" tabindex="-1">
@@ -147,6 +147,9 @@ export default {
         this.newPhoneType = "mobile";
       }
 
+      console.log(this.newPhones);
+
+
       this.$store.state.loading = true;
       await this.updateUser({
         id: this.user.id,
@@ -175,6 +178,14 @@ export default {
   flex-basis: 80%;
   display: flex;
   justify-content: space-between;
+}
+.user-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-button {
+  margin-right: 1em;
 }
 
 .dropdown-menu {
