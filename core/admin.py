@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from core.models import FIO, Type, Addresses, Phones
+from core.models import User, Type, Address, Phone
 
 
-@admin.register(FIO)
-class FIOAdmin(admin.ModelAdmin):
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     pass
 
 
@@ -13,11 +13,11 @@ class TypeAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Addresses)
-class AddressesAdmin(admin.ModelAdmin):
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Phones)
-class PhonesAdmin(admin.ModelAdmin):
+@admin.register(Phone)
+class PhoneAdmin(admin.ModelAdmin):
     pass

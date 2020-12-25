@@ -1,18 +1,6 @@
 from rest_framework import serializers
 
-from core.models import FIO, Type, Phones, Addresses
-
-
-class FIOSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FIO
-        fields = '__all__'
-
-
-class PhonesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Phones
-        fields = '__all__'
+from core.models import User, Type, Phone, Address
 
 
 class TypeSerializer(serializers.ModelSerializer):
@@ -21,7 +9,19 @@ class TypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AddressesSerializer(serializers.ModelSerializer):
+class PhoneSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Addresses
+        model = Phone
+        fields = '__all__'
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
         fields = '__all__'
